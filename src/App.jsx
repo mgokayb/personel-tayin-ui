@@ -1,43 +1,59 @@
-import { useState } from 'react';
-import Login from './components/Login';
-import Header from './components/Header';
-import TayinForm from './components/TayinForm';
-import TaleplerList from './components/TaleplerList';
+// src/App.jsx
+import { useState } from 'react'
+import Header from './components/Header'
+import Login from './components/Login'
+import TayinForm from './components/TayinForm'
+import TaleplerList from './components/TaleplerList'
 
 export default function App() {
   const [authenticated, setAuthenticated] = useState(
     !!localStorage.getItem('access_token')
-  );
-  const [view, setView] = useState('form');
+  )
+  const [view, setView] = useState('form')
 
   if (!authenticated) {
-    return <Login onLogin={() => setAuthenticated(true)} />;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <Login onLogin={() => setAuthenticated(true)} />
+      </div>
+    )
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-gray-50">
       <Header onLogout={() => setAuthenticated(false)} />
-      <div className="max-w-3xl mx-auto mt-10 space-y-4">
-        <div className="flex gap-4">
+      <main className="max-w-3xl mx-auto py-8 px-4">
+        {/* Sekme butonları */}
+        <div className="flex space-x-2 mb-6">
           <button
-            className={`flex-1 p-2 rounded ${
-              view === 'form' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`}
             onClick={() => setView('form')}
+            className={`flex-1 py-2 rounded-lg border ${
+              view === 'form'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
           >
             Yeni Talep
           </button>
           <button
-            className={`flex-1 p-2 rounded ${
-              view === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-            }`}
             onClick={() => setView('list')}
+            className={`flex-1 py-2 rounded-lg border ${
+              view === 'list'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
           >
             Taleplerim
           </button>
         </div>
-        {view === 'form' ? <TayinForm /> : <TaleplerList />}
-      </div>
-    </>
-  );
+
+        {/* İçerik: Form veya Liste */}
+        {view === 'form' ? (
+          <TayinForm />
+        ) : (
+          <TaleplerList />
+        )}
+      </main>
+    </div>
+  )
 }
